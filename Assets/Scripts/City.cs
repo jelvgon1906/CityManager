@@ -69,7 +69,7 @@ public class City : MonoBehaviour
 
     public void DayCicle()
     {
-        curDayTime += Time.deltaTime * timeMultiplier;
+        curDayTime += Time.deltaTime * timeMultiplier * 60;
 
         int minutes = (int)curDayTime / 60;
         int seconds = (int)curDayTime % 60;

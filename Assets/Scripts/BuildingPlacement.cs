@@ -25,6 +25,7 @@ public class BuildingPlacement : MonoBehaviour
 
         currentlyPlacing = true;
         curBuildingPreset = preset;
+        
         placementIndicator.SetActive(true);
 
     }
@@ -50,6 +51,9 @@ public class BuildingPlacement : MonoBehaviour
         //cancel building placement
         if(Input.GetKeyDown(KeyCode.Escape))
             CancelBuildingPlacement();
+
+        //if (Input.GetKeyDown(KeyCode.R))
+            
 
         //called every 0.05 seconds 
         if (Time.time - lastUpdateTime > indicatorUpdateRate)
