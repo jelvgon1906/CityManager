@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildingPlacement : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class BuildingPlacement : MonoBehaviour
     public GameObject placementIndicator;
     public GameObject bulldozeIndicator;
 
+    [SerializeField] GameObject curBuilding;
+
 
     //called when we press a building UI button
     public void BeginNewBuildingPlacement(BuilldingPreset preset)
@@ -24,26 +27,18 @@ public class BuildingPlacement : MonoBehaviour
         //TODO: make sure we have enough money
 
         currentlyPlacing = true;
+        currentlyBulldozering = false;
         curBuildingPreset = preset;
-        
+
         placementIndicator.SetActive(true);
 
-    }
-
-    //called when we place down a building or press Escape
-    private void CancelBuildingPlacement()
-    {
-        
-        currentlyPlacing = false;
-        placementIndicator.SetActive(false);
-       
-    }
-
-    //turn bulldoze on off
-    public void ToggleBulldoze()
-    {
-        currentlyBulldozering = !currentlyBulldozering;
-        bulldozeIndicator.SetActive(currentlyBulldozering);
+        if (curBuilding == null)
+        curBuilding = Instantiate(curBuildingPreset.prefab.transform.GetChild(0).gameObject, placementIndicator.transform);
+        else
+        {
+            Destroy((placementIndicator.transform.GetChild(1).gameObject));
+            curBuilding = Instantiate(curBuildingPreset.prefab.transform.GetChild(0).gameObject, placementIndicator.transform);
+        }
     }
 
     private void Update()
@@ -64,38 +59,60 @@ public class BuildingPlacement : MonoBehaviour
             curIndicatorPos = Selector.instance.GetCurTilePosition();
 
             //move the placement indicator or bulldoze indicator to the selected tile
-            if (currentlyPlacing)
+            if (currentlyPlacing) 
+            { 
                 placementIndicator.transform.position = curIndicatorPos;
+            }
             else if(currentlyBulldozering)
                 bulldozeIndicator.transform.position = curIndicatorPos;
         }
 
+        
         //called when we press left mouse button
-        if (Input.GetMouseButtonDown(0) && currentlyPlacing)
+        if (Input.GetMouseButtonDown(0) && currentlyPlacing && !EventSystem.current.IsPointerOverGameObject())
             PlaceBuilding();
-        else if (Input.GetMouseButtonDown(0) && currentlyBulldozering)
+        else if (Input.GetMouseButtonDown(0) && currentlyBulldozering && !EventSystem.current.IsPointerOverGameObject())
             Bulldoze();
+    }
+
+    //places down the currently selected building
+    private void PlaceBuilding()
+    {
+        currentlyBulldozering = false;
+        
+        GameObject buildingObj = Instantiate(curBuildingPreset.prefab, curIndicatorPos, Quaternion.identity);
+        
+        City.instance.OnPlaceBuilding(buildingObj.GetComponent<Building>());
+
+        /*if (!curBuildingPreset.prefab.tag.Equals("Road"))
+            CancelBuildingPlacement();*/
+    }
+
+    //called when we place down a building or press Escape
+    private void CancelBuildingPlacement()
+    {
+
+        currentlyPlacing = false;
+        placementIndicator.SetActive(false);
+
     }
 
     //deletes the currently selected building
     private void Bulldoze()
     {
-        Building buildingToDestroy = City.instance.buildings.Find(x=>x.transform.position == curIndicatorPos);
-
+        Building buildingToDestroy = City.instance.buildings.Find(x => x.transform.position == curIndicatorPos);
+        
         if (buildingToDestroy != null)
         {
             City.instance.OnRemoveBuilding(buildingToDestroy);
         }
     }
 
-    //places down the currently selected building
-    private void PlaceBuilding()
+    //turn bulldoze on off
+    public void ToggleBulldoze()
     {
-        GameObject buildingObj = Instantiate(curBuildingPreset.prefab, curIndicatorPos, Quaternion.identity);
-
-        City.instance.OnPlaceBuilding(buildingObj.GetComponent<Building>());
-
-        if (!curBuildingPreset.prefab.tag.Equals("Road"))
-            CancelBuildingPlacement();
+        currentlyPlacing = false;
+        currentlyBulldozering = !currentlyBulldozering;
+        bulldozeIndicator.SetActive(currentlyBulldozering);
     }
 }

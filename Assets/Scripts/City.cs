@@ -82,7 +82,7 @@ public class City : MonoBehaviour
             EndTurn();
         }
 
-        sun.transform.rotation = Quaternion.Euler((curDayTime / dayTime) * 360, 0f, 0f);
+        sun.transform.rotation = Quaternion.Euler((curDayTime / dayTime) * 360 + 270, 0f, 0f);
 
         /*RenderSettings.skybox.SetFloat("");*/
     }
@@ -101,7 +101,7 @@ public class City : MonoBehaviour
 
     private void UpdateStatText()
     {
-        statsText.text = String.Format("Day: {0} Money: {1} Pop: {2}/{3} Jobs: {4}/{5} Food: {6} Time: {7} Multy: x{8}", new object[9] {day, money, curPopulation, maxPopulation, curJobs, maxJobs, curFood, time, timeMultiplier});
+        statsText.text = String.Format("Money: {0} Population: {1}/{2} Jobs: {3}/{4} Food: {5} Time: {6} x {7} Day: {8}", new object[9] {money, curPopulation, maxPopulation, curJobs, maxJobs, curFood, time, timeMultiplier, day});
     } 
 
     private void CalculateFood()
