@@ -47,7 +47,10 @@ public class BuildingPlacement : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
             CancelBuildingPlacement();
 
-        //if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            curBuilding.transform.Rotate(0, 90, 0);
+        }
             
 
         //called every 0.05 seconds 
@@ -79,9 +82,9 @@ public class BuildingPlacement : MonoBehaviour
     private void PlaceBuilding()
     {
         currentlyBulldozering = false;
-        
-        GameObject buildingObj = Instantiate(curBuildingPreset.prefab, curIndicatorPos, Quaternion.identity);
-        
+        curBuilding.transform.Rotate(0, -90, 0);//TODO salen girados?
+        GameObject buildingObj = Instantiate(curBuildingPreset.prefab, curIndicatorPos, curBuilding.transform.rotation);
+        curBuilding.transform.Rotate(0, 90, 0);
         City.instance.OnPlaceBuilding(buildingObj.GetComponent<Building>());
 
         /*if (!curBuildingPreset.prefab.tag.Equals("Road"))
