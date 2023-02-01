@@ -8,6 +8,8 @@ public class GridBuildingSystem : MonoBehaviour
     private GridXZ<GridObject> grid;
 
     [SerializeField] private BuilldingPreset builldingPreset;
+    private BuilldingPreset.Dir dir = BuilldingPreset.Dir.Down;
+
 
     [SerializeField] private LayerMask mouseColliderLayerMask = new LayerMask();
 
@@ -70,7 +72,7 @@ public class GridBuildingSystem : MonoBehaviour
 
             GridObject gridObject = grid.GetGridObject(x, z);
 
-            List<Vector2Int> gridPositionList = builldingPreset.GetGridPositionList(new Vector2Int(x, z), BuilldingPreset.Dir.Down); //Grid positions occupied by building
+            List<Vector2Int> gridPositionList = builldingPreset.GetGridPositionList(new Vector2Int(x, z), dir); //Grid positions occupied by building
 
             //Can you build?
             bool canBuild = true;
@@ -84,7 +86,11 @@ public class GridBuildingSystem : MonoBehaviour
             }
             if (canBuild)
             {
-                Transform builtTransform = Instantiate(builldingPreset.prefab.transform, grid.GetWorldPosition(x, z), Quaternion.identity);
+                //Offset de la rotacion
+                Vector2Int rotationOffset = builldingPreset.GetRotationOffset(dir);
+                Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
+
+                Transform builtTransform = Instantiate(builldingPreset.prefab.transform, /*grid.GetWorldPosition(x, z)*/placedObjectWorldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
                 
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
@@ -96,6 +102,12 @@ public class GridBuildingSystem : MonoBehaviour
                 print("You can't build there");
                 //TODO: You can't build there
             }
+        }
+
+        //Rotar el edificio
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            dir = BuilldingPreset.GetNextDir(dir);
         }
     }
     private Vector3 GetMouseWorldPosition()
