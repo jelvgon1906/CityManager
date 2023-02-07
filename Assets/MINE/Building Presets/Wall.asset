@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a58f07604ff0c1249b2fd9b1a0b2dbfa, type: 3}
-  m_Name: House
+  m_Name: Wall
   m_EditorClassIdentifier: 
-  cost: 15
-  costPerTurn: 5
-  prefab: {fileID: 4911147921142196870, guid: 7904964cc158df843ab6a8fdd59b7944, type: 3}
+  cost: 1
+  costPerTurn: 1
+  prefab: {fileID: 4911147921142196870, guid: 34cb3ee3f73ede049931c34cba894023, type: 3}
   width: 0
   height: 0
-  population: 10
+  population: 0
   jobs: 0
-  food: -5
+  food: 0

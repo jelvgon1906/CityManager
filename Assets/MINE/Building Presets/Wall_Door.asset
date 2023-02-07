@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a58f07604ff0c1249b2fd9b1a0b2dbfa, type: 3}
-  m_Name: Sawmill
+  m_Name: Wall_Door
   m_EditorClassIdentifier: 
-  cost: 10
-  costPerTurn: 5
-  prefab: {fileID: 2672476224488938, guid: 4b160968fa9e83b44b320e2c83a6387f, type: 3}
+  cost: 1
+  costPerTurn: 1
+  prefab: {fileID: 4911147921142196870, guid: a4be000028a6ab34b866e7aeec26290d, type: 3}
+  width: 0
+  height: 0
   population: 0
-  jobs: 3
-  food: 20
+  jobs: 0
+  food: 0

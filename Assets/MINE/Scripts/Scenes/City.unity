@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10217317, g: 0.10984258, b: 0.12945814, a: 1}
+  m_IndirectSpecularColor: {r: 0.03451534, g: 0.03451534, b: 0.03451534, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -157,7 +157,7 @@ MonoBehaviour:
   maxXRot: 50
   minZoom: 5
   maxZoom: 100
-  zoomSpeed: 50
+  zoomSpeed: 20
   rotateSpeed: 15
 --- !u!4 &1297324
 Transform:
@@ -466,6 +466,37 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &1418412798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1418412799}
+  m_Layer: 0
+  m_Name: Ghost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1418412799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418412798}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3604.1223, y: -2808.637, z: 330.60107}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1738171314
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +526,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33c3cf981d36af64997fc611d5edea14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  builldingPreset: {fileID: 11400000, guid: ea1cb3cb0d1b9b64387db1465cf28560, type: 2}
+  builldingPresetList:
+  - {fileID: 11400000, guid: e80e0bd536f5b8a4f9d96c6e8b508452, type: 2}
+  - {fileID: 11400000, guid: ea1cb3cb0d1b9b64387db1465cf28560, type: 2}
+  - {fileID: 11400000, guid: 572b9e467c97bcb4ba9c77d7961426b0, type: 2}
+  - {fileID: 11400000, guid: 944767219f2ac1244b48d56cf6189969, type: 2}
+  - {fileID: 11400000, guid: 8e8ffc35e1fa7b2478b6ceeb31d6b6c4, type: 2}
+  - {fileID: 11400000, guid: ccb48d162cc6aba49a265f5ff36160d6, type: 2}
+  - {fileID: 11400000, guid: a0ac704fcd1162a4188f28eb4053df35, type: 2}
+  - {fileID: 11400000, guid: 1517c9e5ef9306a41ae14f83b8eb75c1, type: 2}
+  - {fileID: 11400000, guid: 53713dc9e4c155142a1d94a8d8b08534, type: 2}
   mouseColliderLayerMask:
     serializedVersion: 2
     m_Bits: 64

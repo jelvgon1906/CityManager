@@ -7,11 +7,15 @@ public class GridBuildingSystem : MonoBehaviour
 {
     private GridXZ<GridObject> grid;
 
-    [SerializeField] private BuilldingPreset builldingPreset;
+    [SerializeField] private List<BuilldingPreset> builldingPresetList;
+    private BuilldingPreset builldingPreset;
     private BuilldingPreset.Dir dir = BuilldingPreset.Dir.Down;
 
 
     [SerializeField] private LayerMask mouseColliderLayerMask = new LayerMask();
+
+    public event EventHandler OnSelectedChanged;
+    public event EventHandler OnObjectPlaced;
 
 
     private void Awake()
@@ -21,6 +25,8 @@ public class GridBuildingSystem : MonoBehaviour
         float cellSize = 10f;
         float offsetGrid = (gridWidth / 2) * cellSize;
         grid = new GridXZ<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-offsetGrid, 0, -offsetGrid), (GridXZ<GridObject> g, int x, int y) => new GridObject(g, x, y));
+
+        builldingPreset = builldingPresetList[0];
     }
 
     public class GridObject
@@ -29,7 +35,7 @@ public class GridBuildingSystem : MonoBehaviour
         private GridXZ<GridObject> grid;
         private int x;
         private int y;
-        public Transform placedObject;
+        public PlacedObject placedObject;
         public GridObject(GridXZ<GridObject> grid, int x, int y)
         {
             this.grid = grid;
@@ -41,7 +47,7 @@ public class GridBuildingSystem : MonoBehaviour
             return x + ", " + y;
         }
 
-        public void SetPlacedObject(Transform placedObject)
+        public void SetPlacedObject(PlacedObject placedObject)
         {
             this.placedObject = placedObject;
             grid.TriggerGridObjectChanged(x, y);
@@ -53,7 +59,7 @@ public class GridBuildingSystem : MonoBehaviour
             grid.TriggerGridObjectChanged(x, y);
         }
 
-        public Transform GetPlacedObject()
+        public PlacedObject GetPlacedObject()
         {
             return placedObject;
         }
@@ -90,11 +96,14 @@ public class GridBuildingSystem : MonoBehaviour
                 Vector2Int rotationOffset = builldingPreset.GetRotationOffset(dir);
                 Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
 
-                Transform builtTransform = Instantiate(builldingPreset.prefab.transform, /*grid.GetWorldPosition(x, z)*/placedObjectWorldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
-                
+                //Transform builtTransform = Instantiate(builldingPreset.prefab.transform, /*grid.GetWorldPosition(x, z)*/placedObjectWorldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
+
+                //TODO: ARREGLAR DATOS NO GUARDA AL METER MECANICA BORRAR
+                PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, new Vector2Int(x, z), dir, builldingPreset);
+
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
-                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(builtTransform);
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
                 }
             }
             else
@@ -109,6 +118,46 @@ public class GridBuildingSystem : MonoBehaviour
         {
             dir = BuilldingPreset.GetNextDir(dir);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Vector3 mousePosition = GetMouseWorldPosition();
+            if (grid.GetGridObject(mousePosition) != null)
+            {
+                PlacedObject placedObject = grid.GetGridObject(mousePosition).GetPlacedObject();
+                if (placedObject != null)
+                {
+                    placedObject.DestroySelf();
+
+                    List<Vector2Int> gridPositionList = placedObject.GetGridPositionList();
+                    foreach (Vector2Int gridPosition in gridPositionList)
+                    {
+                        grid.GetGridObject(gridPosition.x, gridPosition.y).ClearPlacedObject();
+                    }
+                }
+            }
+        }
+    }
+
+    private void DeselectObjectType()
+    {
+        builldingPreset = null; RefreshSelectedObjectType();
+    }
+    private void RefreshSelectedObjectType()
+    {
+        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
     }
     private Vector3 GetMouseWorldPosition()
     {
