@@ -5,14 +5,14 @@ using UnityEngine;
 public class VisualGhost : MonoBehaviour
 {
 
-    private Transform visual;
+    private GameObject visual;
     private BuilldingPreset builldingPreset;
 
     private void Start()
     {
         RefreshVisual();
 
-        GridBuildingSystem3D.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
+        GridBuildingSystem.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
     }
 
     private void Instance_OnSelectedChanged(object sender, System.EventArgs e)
@@ -22,11 +22,11 @@ public class VisualGhost : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 targetPosition = GridBuildingSystem3D.Instance.GetMouseWorldSnappedPosition();
+        Vector3 targetPosition = GridBuildingSystem.Instance.GetMouseWorldSnappedPosition();
         targetPosition.y = 1f;
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 15f);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, GridBuildingSystem3D.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, GridBuildingSystem.Instance.GetPlacedBuilldingPresetRotation(), Time.deltaTime * 15f);
     }
 
     private void RefreshVisual()
@@ -37,14 +37,14 @@ public class VisualGhost : MonoBehaviour
             visual = null;
         }
 
-        PlacedObjectTypeSO placedObjectTypeSO = GridBuildingSystem3D.Instance.GetPlacedObjectTypeSO();
+        BuilldingPreset builldingPreset = GridBuildingSystem.Instance.GetPlacedBuilldingPreset();
 
-        if (placedObjectTypeSO != null)
+        if (builldingPreset != null)
         {
-            visual = Instantiate(placedObjectTypeSO.visual, Vector3.zero, Quaternion.identity);
-            visual.parent = transform;
-            visual.localPosition = Vector3.zero;
-            visual.localEulerAngles = Vector3.zero;
+            visual = Instantiate(builldingPreset.visual, Vector3.zero, Quaternion.identity);
+            visual.transform.position = transform.position;
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localEulerAngles = Vector3.zero;
             SetLayerRecursive(visual.gameObject, 11);
         }
     }
@@ -59,9 +59,7 @@ public class VisualGhost : MonoBehaviour
     }
 
 }
+
+
+
 */
-
-
-//TODO
-
-

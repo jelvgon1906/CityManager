@@ -17,12 +17,13 @@ public class GridBuildingSystem : MonoBehaviour
     [SerializeField] private LayerMask mouseColliderLayerMask = new LayerMask();
 
     public event EventHandler OnSelectedChanged;
-    public event EventHandler OnObjectPlaced;
+
+    public static GridBuildingSystem Instance { get; private set; }
 
 
-    
     public bool currentlyBulldozering;
-
+    public GameObject placementIndicator;
+    public GameObject bulldozeIndicator;
 
 
     private void Awake()
@@ -111,7 +112,7 @@ public class GridBuildingSystem : MonoBehaviour
 
                 //Transform builtTransform = Instantiate(builldingPreset.prefab.transform, /*grid.GetWorldPosition(x, z)*/placedObjectWorldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
 
-                //TODO: ARREGLAR DATOS NO GUARDA AL METER MECANICA BORRAR
+                
                 PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, new Vector2Int(x, z), dir, builldingPreset);
 
                 foreach (Vector2Int gridPosition in gridPositionList)
@@ -163,17 +164,29 @@ public class GridBuildingSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
 
         //Seleccionar edificios
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
 
+
+        if (!currentlyBulldozering)
+        {
+            placementIndicator.SetActive(true);
+            placementIndicator.transform.position = GetMouseWorldSnappedPosition();
+        }
+        else if (currentlyBulldozering)
+        {
+            bulldozeIndicator.SetActive(true);
+            bulldozeIndicator.transform.position = GetMouseWorldSnappedPosition();
+        }
     }
+
 
     private void DeselectObjectType()
     {
@@ -192,12 +205,56 @@ public class GridBuildingSystem : MonoBehaviour
         }
         else
         {
-            return Vector3.zero;
+            return new Vector3(1000,1000,1000);
         }
     }
     public void ToggleBulldoze()
     {
-        
+        placementIndicator.SetActive(false);
+        bulldozeIndicator.SetActive(false);
         currentlyBulldozering = !currentlyBulldozering;
+    }
+
+
+
+    //Ghost TODO
+
+    public Vector2Int GetGridPosition(Vector3 worldPosition)
+    {
+        grid.GetXZ(worldPosition, out int x, out int z);
+        return new Vector2Int(x, z);
+    }
+    public Vector3 GetMouseWorldSnappedPosition()
+    {
+        Vector3 mousePosition = GetMouseWorldPosition();
+        grid.GetXZ(mousePosition, out int x, out int z);
+
+        if (builldingPreset != null)
+        {
+            Vector2Int rotationOffset = builldingPreset.GetRotationOffset(dir);
+            Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
+            return placedObjectWorldPosition;
+        }
+        else
+        {
+            return mousePosition;
+        }
+    }
+
+    public Quaternion GetPlacedBuilldingPresetRotation()
+    {
+        if (builldingPreset != null)
+        {
+            return Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0);
+        }
+        else
+        {
+            return Quaternion.identity;
+        }
+    }
+
+    public BuilldingPreset GetPlacedBuilldingPreset()
+    {
+        return builldingPreset;
     }
 }

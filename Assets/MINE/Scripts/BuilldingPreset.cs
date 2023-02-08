@@ -9,6 +9,7 @@ public class BuilldingPreset : ScriptableObject
     public int cost;
     public int costPerTurn;
     public GameObject prefab;
+    public GameObject visual;
     public int width;
     public int height;
 

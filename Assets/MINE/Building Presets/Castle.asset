@@ -15,6 +15,7 @@ MonoBehaviour:
   cost: 0
   costPerTurn: 20
   prefab: {fileID: 2672476224488938, guid: fad26add040e9224ca7f031f6566a7ed, type: 3}
+  visual: {fileID: 2672476224488938, guid: ee54b37f74314e04882044ae00e964ce, type: 3}
   width: 2
   height: 2
   population: 10

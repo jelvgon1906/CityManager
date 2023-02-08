@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlacedObject : MonoBehaviour
 {
 
-    //TODO
-
     public static PlacedObject Create(Vector3 worldPosition, Vector2Int origin, BuilldingPreset.Dir dir, BuilldingPreset builldingPreset)
     {
         Transform placedObjectTransform = Instantiate(builldingPreset.prefab.transform, worldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
@@ -38,10 +36,5 @@ public class PlacedObject : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    /*public override string ToString()
-    {
-        return builldingPreset.nameString;
-    }*/
 
 }
