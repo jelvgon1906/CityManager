@@ -36,7 +36,7 @@ public class GridBuildingSystem : MonoBehaviour
         grid = new GridXZ<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-offsetGrid, 0, -offsetGrid), (GridXZ<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
         //List prefabs
-        builldingPreset = builldingPresetList[0];
+        builldingPreset = null; /*= builldingPresetList[0];*/
 
         //Placement
         currentlyBulldozering = false;
@@ -55,11 +55,6 @@ public class GridBuildingSystem : MonoBehaviour
             this.x = x;
             this.y = y;
         }
-        public override string ToString()
-        {
-            return x + ", " + y;
-        }
-
         public void SetPlacedObject(PlacedObject placedObject)
         {
             this.placedObject = placedObject;
@@ -85,13 +80,17 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !currentlyBulldozering)
+        if (Input.GetMouseButtonDown(0) && !currentlyBulldozering && builldingPreset != null)
         {
             grid.GetXZ(GetMouseWorldPosition(), out int x, out int z); //Localización en el grid
 
+
+            Vector2Int placedObjectOrigin = new Vector2Int(x, z);
+            placedObjectOrigin = grid.ValidateGridPosition(placedObjectOrigin);
+
             GridObject gridObject = grid.GetGridObject(x, z);
 
-            List<Vector2Int> gridPositionList = builldingPreset.GetGridPositionList(new Vector2Int(x, z), dir); //Grid positions occupied by building
+            List<Vector2Int> gridPositionList = builldingPreset.GetGridPositionList(/*new Vector2Int(x, z)*/placedObjectOrigin, dir); //Grid positions occupied by building
 
             //Can you build?
             bool canBuild = true;
@@ -108,12 +107,12 @@ public class GridBuildingSystem : MonoBehaviour
             {
                 //Offset de la rotacion
                 Vector2Int rotationOffset = builldingPreset.GetRotationOffset(dir);
-                Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
+                Vector3 placedObjectWorldPosition = grid.GetWorldPosition/*(x, z)*/(placedObjectOrigin.x, placedObjectOrigin.y) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
 
                 //Transform builtTransform = Instantiate(builldingPreset.prefab.transform, /*grid.GetWorldPosition(x, z)*/placedObjectWorldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
 
                 
-                PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, new Vector2Int(x, z), dir, builldingPreset);
+                PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, /*new Vector2Int(x, z)*/placedObjectOrigin, dir, builldingPreset);
 
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
@@ -175,7 +174,7 @@ public class GridBuildingSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
 
 
-        if (!currentlyBulldozering)
+        if (!currentlyBulldozering && builldingPreset != null)
         {
             placementIndicator.SetActive(true);
             placementIndicator.transform.position = GetMouseWorldSnappedPosition();
@@ -187,15 +186,6 @@ public class GridBuildingSystem : MonoBehaviour
         }
     }
 
-
-    private void DeselectObjectType()
-    {
-        builldingPreset = null; RefreshSelectedObjectType();
-    }
-    private void RefreshSelectedObjectType()
-    {
-        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
-    }
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -205,7 +195,7 @@ public class GridBuildingSystem : MonoBehaviour
         }
         else
         {
-            return new Vector3(1000,1000,1000);
+            return new Vector3(1000, 1000, 1000);
         }
     }
     public void ToggleBulldoze()
@@ -214,8 +204,15 @@ public class GridBuildingSystem : MonoBehaviour
         bulldozeIndicator.SetActive(false);
         currentlyBulldozering = !currentlyBulldozering;
     }
-
-
+    private void DeselectObjectType()
+    {
+        builldingPreset = null; RefreshSelectedObjectType();
+    }
+    private void RefreshSelectedObjectType()
+    {
+        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
+    }
+    
 
     //Ghost TODO
 

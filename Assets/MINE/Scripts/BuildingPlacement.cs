@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +33,7 @@ public class BuildingPlacement : MonoBehaviour
         placementIndicator.SetActive(true);
 
         if (curBuilding == null)
-        curBuilding = Instantiate(curBuildingPreset.prefab.transform.GetChild(0).gameObject, placementIndicator.transform);
+            curBuilding = Instantiate(curBuildingPreset.prefab.transform.GetChild(0).gameObject, placementIndicator.transform);
         else
         {
             Destroy((placementIndicator.transform.GetChild(1).gameObject));
@@ -44,14 +44,14 @@ public class BuildingPlacement : MonoBehaviour
     private void Update()
     {
         //cancel building placement
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
             CancelBuildingPlacement();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             curBuilding.transform.Rotate(0, 90, 0);
         }
-            
+
 
         //called every 0.05 seconds 
         if (Time.time - lastUpdateTime > indicatorUpdateRate)
@@ -62,15 +62,15 @@ public class BuildingPlacement : MonoBehaviour
             curIndicatorPos = Selector.instance.GetCurTilePosition();
 
             //move the placement indicator or bulldoze indicator to the selected tile
-            if (currentlyPlacing) 
-            { 
+            if (currentlyPlacing)
+            {
                 placementIndicator.transform.position = curIndicatorPos;
             }
-            else if(currentlyBulldozering)
+            else if (currentlyBulldozering)
                 bulldozeIndicator.transform.position = curIndicatorPos;
         }
 
-        
+
         //called when we press left mouse button
         if (Input.GetMouseButtonDown(0) && currentlyPlacing && !EventSystem.current.IsPointerOverGameObject())
             PlaceBuilding();
@@ -87,8 +87,8 @@ public class BuildingPlacement : MonoBehaviour
         curBuilding.transform.Rotate(0, 90, 0);
         City.instance.OnPlaceBuilding(buildingObj.GetComponent<Building>());
 
-        /*if (!curBuildingPreset.prefab.tag.Equals("Road"))
-            CancelBuildingPlacement();*/
+        if (!curBuildingPreset.prefab.tag.Equals("Road"))
+            CancelBuildingPlacement();
     }
 
     //called when we place down a building or press Escape
@@ -104,7 +104,7 @@ public class BuildingPlacement : MonoBehaviour
     private void Bulldoze()
     {
         Building buildingToDestroy = City.instance.buildings.Find(x => x.transform.position == curIndicatorPos);
-        
+
         if (buildingToDestroy != null)
         {
             City.instance.OnRemoveBuilding(buildingToDestroy);
@@ -119,3 +119,4 @@ public class BuildingPlacement : MonoBehaviour
         bulldozeIndicator.SetActive(currentlyBulldozering);
     }
 }
+*/

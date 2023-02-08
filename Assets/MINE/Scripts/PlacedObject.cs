@@ -7,9 +7,10 @@ public class PlacedObject : MonoBehaviour
 
     public static PlacedObject Create(Vector3 worldPosition, Vector2Int origin, BuilldingPreset.Dir dir, BuilldingPreset builldingPreset)
     {
-        Transform placedObjectTransform = Instantiate(builldingPreset.prefab.transform, worldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));
+        Transform placedObjectTransform = Instantiate(builldingPreset.prefab.transform, worldPosition, Quaternion.Euler(0, builldingPreset.GetRotationAngle(dir), 0));//transform!
 
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
+        /*placedObject.Setup(builldingPreset, origin, dir);*/
         placedObject.builldingPreset = builldingPreset;
         placedObject.origin = origin;
         placedObject.dir = dir;

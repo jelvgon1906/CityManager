@@ -8,8 +8,15 @@ public class BuilldingPreset : ScriptableObject
 {
     public int cost;
     public int costPerTurn;
+    public int population;
+    public int jobs;
+    public int food;
+
+
     public GameObject prefab;
     public GameObject visual;
+    /*public Transform prefab;
+    public Transform visual;*/
     public int width;
     public int height;
 
@@ -31,12 +38,6 @@ public class BuilldingPreset : ScriptableObject
         Up,
         Right,
     }
-
-    public int population;
-    public int jobs;
-    public int food;
-
-
     public int GetRotationAngle(Dir dir)
     {
         switch (dir)

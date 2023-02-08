@@ -5,7 +5,7 @@ using UnityEngine;
 public class VisualGhost : MonoBehaviour
 {
 
-    private GameObject visual;
+    private Transform visual;
     private BuilldingPreset builldingPreset;
 
     private void Start()
@@ -37,14 +37,14 @@ public class VisualGhost : MonoBehaviour
             visual = null;
         }
 
-        BuilldingPreset builldingPreset = GridBuildingSystem.Instance.GetPlacedBuilldingPreset();
+        builldingPreset = GridBuildingSystem.Instance.GetPlacedBuilldingPreset();
 
         if (builldingPreset != null)
         {
-            visual = Instantiate(builldingPreset.visual, Vector3.zero, Quaternion.identity);
-            visual.transform.position = transform.position;
-            visual.transform.localPosition = Vector3.zero;
-            visual.transform.localEulerAngles = Vector3.zero;
+            visual = Instantiate(builldingPreset.visual.transform, Vector3.zero, Quaternion.identity);
+            visual.position = transform.position;
+            visual.localPosition = Vector3.zero;
+            visual.localEulerAngles = Vector3.zero;
             SetLayerRecursive(visual.gameObject, 11);
         }
     }
