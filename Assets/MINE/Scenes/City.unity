@@ -158,7 +158,7 @@ MonoBehaviour:
   minZoom: 5
   maxZoom: 100
   zoomSpeed: 20
-  rotateSpeed: 15
+  rotateSpeed: 10
 --- !u!4 &1297324
 Transform:
   m_ObjectHideFlags: 0
