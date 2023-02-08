@@ -2,31 +2,43 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GridBuildingSystem : MonoBehaviour
 {
     private GridXZ<GridObject> grid;
 
+    //Lista de prefabs
     [SerializeField] private List<BuilldingPreset> builldingPresetList;
     private BuilldingPreset builldingPreset;
     private BuilldingPreset.Dir dir = BuilldingPreset.Dir.Down;
 
-
+    //Capa colision ray raton
     [SerializeField] private LayerMask mouseColliderLayerMask = new LayerMask();
 
     public event EventHandler OnSelectedChanged;
     public event EventHandler OnObjectPlaced;
 
 
+    
+    public bool currentlyBulldozering;
+
+
+
     private void Awake()
     {
+        //Grid options
         int gridWidth = 30;
         int gridHeight = 30;
         float cellSize = 10f;
         float offsetGrid = (gridWidth / 2) * cellSize;
         grid = new GridXZ<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-offsetGrid, 0, -offsetGrid), (GridXZ<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
+        //List prefabs
         builldingPreset = builldingPresetList[0];
+
+        //Placement
+        currentlyBulldozering = false;
     }
 
     public class GridObject
@@ -72,7 +84,7 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !currentlyBulldozering)
         {
             grid.GetXZ(GetMouseWorldPosition(), out int x, out int z); //Localización en el grid
 
@@ -90,6 +102,7 @@ public class GridBuildingSystem : MonoBehaviour
                     break;
                 }
             }
+
             if (canBuild)
             {
                 //Offset de la rotacion
@@ -103,7 +116,7 @@ public class GridBuildingSystem : MonoBehaviour
 
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
-                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);//.SetTransform(builtTransform);
                 }
             }
             else
@@ -111,27 +124,11 @@ public class GridBuildingSystem : MonoBehaviour
                 print("You can't build there");
                 //TODO: You can't build there
             }
+
+            
+
         }
-
-        //Rotar el edificio
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            dir = BuilldingPreset.GetNextDir(dir);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); }
-
-        if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetMouseButtonDown(0) && currentlyBulldozering)
         {
             Vector3 mousePosition = GetMouseWorldPosition();
             if (grid.GetGridObject(mousePosition) != null)
@@ -149,6 +146,33 @@ public class GridBuildingSystem : MonoBehaviour
                 }
             }
         }
+        
+
+        //Rotar el edificio
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            dir = BuilldingPreset.GetNextDir(dir);
+        }
+        //Cambiar Destruir/Construir
+        if (Input.GetKeyUp(KeyCode.B))
+        {
+            ToggleBulldoze();
+        }
+
+        //Deseleccionar edificio
+        if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
+
+        //Seleccionar edificios
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); }
+
     }
 
     private void DeselectObjectType()
@@ -170,5 +194,10 @@ public class GridBuildingSystem : MonoBehaviour
         {
             return Vector3.zero;
         }
+    }
+    public void ToggleBulldoze()
+    {
+        
+        currentlyBulldozering = !currentlyBulldozering;
     }
 }

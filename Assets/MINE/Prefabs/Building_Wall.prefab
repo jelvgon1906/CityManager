@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5334577950706561294}
   - component: {fileID: 1844802103700378642}
+  - component: {fileID: -39042583358668563}
   m_Layer: 0
   m_Name: Building_Wall
   m_TagString: Road
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: a0ac704fcd1162a4188f28eb4053df35, type: 2}
+--- !u!114 &-39042583358668563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4911147921142196870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7a63ba1482f7744a85e51ce3fe84f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1741566705514399365
 PrefabInstance:
   m_ObjectHideFlags: 0

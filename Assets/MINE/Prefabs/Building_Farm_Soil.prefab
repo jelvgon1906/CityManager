@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5334577950706561294}
   - component: {fileID: 1844802103700378642}
+  - component: {fileID: 5604731189353556624}
   m_Layer: 0
   m_Name: Building_Farm_Soil
   m_TagString: Road
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 572b9e467c97bcb4ba9c77d7961426b0, type: 2}
+--- !u!114 &5604731189353556624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4911147921142196870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7a63ba1482f7744a85e51ce3fe84f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4109178394233074057
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -19,13 +19,9 @@ public class PlacedObject : MonoBehaviour
         return placedObject;
     }
 
-
-
-
     private BuilldingPreset builldingPreset;
     private Vector2Int origin;
     private BuilldingPreset.Dir dir;
-
     private void Setup(BuilldingPreset builldingPreset, Vector2Int origin, BuilldingPreset.Dir dir)
     {
         this.builldingPreset = builldingPreset;

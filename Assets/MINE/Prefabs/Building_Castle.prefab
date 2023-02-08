@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7435961704083585761}
   - component: {fileID: 8392807809749762572}
+  - component: {fileID: -6885094266078634564}
   m_Layer: 0
   m_Name: Building_Castle
   m_TagString: Untagged
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: ccb48d162cc6aba49a265f5ff36160d6, type: 2}
+--- !u!114 &-6885094266078634564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672476224488938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7a63ba1482f7744a85e51ce3fe84f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2957279176823367576
 PrefabInstance:
   m_ObjectHideFlags: 0
