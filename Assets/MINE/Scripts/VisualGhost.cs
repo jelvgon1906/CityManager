@@ -1,24 +1,19 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VisualGhost : MonoBehaviour
 {
 
-    private Transform visual;
-    private BuilldingPreset builldingPreset;
+    private GameObject visual;
+    public BuilldingPreset builldingPreset;
 
     private void Start()
     {
         RefreshVisual();
 
-        GridBuildingSystem.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
     }
 
-    private void Instance_OnSelectedChanged(object sender, System.EventArgs e)
-    {
-        RefreshVisual();
-    }
 
     private void LateUpdate()
     {
@@ -29,7 +24,7 @@ public class VisualGhost : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, GridBuildingSystem.Instance.GetPlacedBuilldingPresetRotation(), Time.deltaTime * 15f);
     }
 
-    private void RefreshVisual()
+    public void RefreshVisual()
     {
         if (visual != null)
         {
@@ -41,10 +36,10 @@ public class VisualGhost : MonoBehaviour
 
         if (builldingPreset != null)
         {
-            visual = Instantiate(builldingPreset.visual.transform, Vector3.zero, Quaternion.identity);
-            visual.position = transform.position;
-            visual.localPosition = Vector3.zero;
-            visual.localEulerAngles = Vector3.zero;
+            visual = Instantiate(builldingPreset.visual, Vector3.zero, Quaternion.identity);
+            visual.transform.position = transform.position;
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localEulerAngles = Vector3.zero;
             SetLayerRecursive(visual.gameObject, 11);
         }
     }
@@ -62,4 +57,3 @@ public class VisualGhost : MonoBehaviour
 
 
 
-*/

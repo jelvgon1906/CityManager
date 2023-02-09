@@ -16,7 +16,7 @@ public class GridBuildingSystem : MonoBehaviour
     //Capa colision ray raton
     [SerializeField] private LayerMask mouseColliderLayerMask = new LayerMask();
 
-    public event EventHandler OnSelectedChanged;
+    private VisualGhost visualGhost;
 
     public static GridBuildingSystem Instance { get; private set; }
 
@@ -40,6 +40,13 @@ public class GridBuildingSystem : MonoBehaviour
 
         //Placement
         currentlyBulldozering = false;
+
+        visualGhost = GetComponent<VisualGhost>();
+
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
     }
 
     public class GridObject
@@ -163,20 +170,38 @@ public class GridBuildingSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
 
         //Seleccionar edificios
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
-        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; RefreshSelectedObjectType(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { builldingPreset = builldingPresetList[0]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { builldingPreset = builldingPresetList[1]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { builldingPreset = builldingPresetList[2]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) { builldingPreset = builldingPresetList[3]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { builldingPreset = builldingPresetList[4]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha6)) { builldingPreset = builldingPresetList[5]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha7)) { builldingPreset = builldingPresetList[6]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha8)) { builldingPreset = builldingPresetList[7]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
+        if (Input.GetKeyDown(KeyCode.Alpha9)) { builldingPreset = builldingPresetList[8]; BeginPlacing(); if (currentlyBulldozering) { ToggleBulldoze(); } }
 
+        if (!currentlyBulldozering && builldingPreset != null)
+        {
+            placementIndicator.transform.position = GetMouseWorldSnappedPosition();
+        }
+        else if (currentlyBulldozering)
+        {
+            bulldozeIndicator.SetActive(true);
+            bulldozeIndicator.transform.position = GetMouseWorldSnappedPosition();
+        }
+
+    }
+
+    private void BeginPlacing()
+    {
+        if (placementIndicator.transform.childCount > 1)
+            Destroy(placementIndicator.transform.GetChild(1).gameObject);
 
         if (!currentlyBulldozering && builldingPreset != null)
         {
             placementIndicator.SetActive(true);
+            GameObject ghost = Instantiate(builldingPreset.visual.gameObject, placementIndicator.transform);
+            
             placementIndicator.transform.position = GetMouseWorldSnappedPosition();
         }
         else if (currentlyBulldozering)
@@ -189,7 +214,7 @@ public class GridBuildingSystem : MonoBehaviour
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, mouseColliderLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity, mouseColliderLayerMask))
         {
             return raycastHit.point;
         }
@@ -200,6 +225,8 @@ public class GridBuildingSystem : MonoBehaviour
     }
     public void ToggleBulldoze()
     {
+        if (placementIndicator.transform.childCount > 1)
+            Destroy(placementIndicator.transform.GetChild(1).gameObject);
         placementIndicator.SetActive(false);
         bulldozeIndicator.SetActive(false);
         currentlyBulldozering = !currentlyBulldozering;
@@ -210,7 +237,8 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private void RefreshSelectedObjectType()
     {
-        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
+        /*visualGhost.builldingPreset = builldingPreset;
+        visualGhost.RefreshVisual();*/
     }
     
 
@@ -226,11 +254,17 @@ public class GridBuildingSystem : MonoBehaviour
         Vector3 mousePosition = GetMouseWorldPosition();
         grid.GetXZ(mousePosition, out int x, out int z);
 
-        if (builldingPreset != null)
+        if (builldingPreset != null )
         {
             Vector2Int rotationOffset = builldingPreset.GetRotationOffset(dir);
             Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * grid.GetCellSize();
             return placedObjectWorldPosition;
+        }
+        else if(currentlyBulldozering)
+        {
+            Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, z) ;
+            return placedObjectWorldPosition;
+
         }
         else
         {

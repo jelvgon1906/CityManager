@@ -13,10 +13,12 @@ public class RoadPlacer : MonoBehaviour
     [SerializeField] private List<Texture> roadTextures = new List<Texture>();
 
     private bool isPlacing = false;
+    private float sideSize = 1f;
     private WaypointManager waypointManager;
 
     private void Start()
     {
+        sideSize = road.transform.localScale.x;
         waypointManager = GetComponent<WaypointManager>();
         StartCoroutine(PlaceRoad());
     }
@@ -54,16 +56,16 @@ public class RoadPlacer : MonoBehaviour
                 switch (i)
                 {
                     case 0:
-                        roadCheckerPos.x += 1; // Check right
+                        roadCheckerPos.x += sideSize; // Check right
                         break;
                     case 1:
-                        roadCheckerPos.x -= 1; // Check left
+                        roadCheckerPos.x -= sideSize; // Check left
                         break;
                     case 2:
-                        roadCheckerPos.z += 1; // Check Front
+                        roadCheckerPos.z += sideSize; // Check Front
                         break;
                     case 3:
-                        roadCheckerPos.z -= 1; // Check Back
+                        roadCheckerPos.z -= sideSize; // Check Back
                         break;
                 }
                 List<Collider> cols = Physics.OverlapBox(roadCheckerPos, road.transform.localScale / 2.1f, Quaternion.identity, roadLayer).ToList();
@@ -128,16 +130,16 @@ public class RoadPlacer : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    roadCheckerPos.x += 1; // Check right
+                    roadCheckerPos.x += sideSize; // Check right
                     break;
                 case 1:
-                    roadCheckerPos.x -= 1; // Check left
+                    roadCheckerPos.x -= sideSize; // Check left
                     break;
                 case 2:
-                    roadCheckerPos.z += 1; // Check Front
+                    roadCheckerPos.z += sideSize; // Check Front
                     break;
                 case 3:
-                    roadCheckerPos.z -= 1; // Check Back
+                    roadCheckerPos.z -= sideSize; // Check Back
                     break;
             }
             List<Collider> cols = Physics.OverlapBox(roadCheckerPos, road.transform.localScale / 2.1f, Quaternion.identity, roadLayer).ToList();
@@ -164,11 +166,11 @@ public class RoadPlacer : MonoBehaviour
         if (neighbours == 4)
         {
             waypointManager.AddWaypoint(roadAux.transform.position);
-            roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[4]);
+            roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[4];
         } else if(neighbours == 3)
         {
             waypointManager.AddWaypoint(roadAux.transform.position);
-            roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[3]);
+            roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[3];
             if (directions[3] && !directions[2]) // There is one below not one on top
                 roadAux.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
             else if(!directions[3] && directions[2]) // There is one on top not one below
@@ -182,18 +184,18 @@ public class RoadPlacer : MonoBehaviour
             if(directions[0] && directions[1]) // horizontal
             {
                 waypointManager.RemoveWaypoint(roadAux.transform.position);
-                roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[2]);
+                roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[2];
                 roadAux.transform.rotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
 
             } else if(directions[2] && directions[3]) // Vertical
             {
                 waypointManager.RemoveWaypoint(roadAux.transform.position);
-                roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[2]);
+                roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[2];
             }
             else // We have a turn
             {
                 waypointManager.AddWaypoint(roadAux.transform.position);
-                roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[5]);
+                roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[5];
                 if (directions[0]) // Right
                 {
                     if (directions[2]) // Top
@@ -212,7 +214,7 @@ public class RoadPlacer : MonoBehaviour
         } else if (neighbours == 1)
         {
             waypointManager.AddWaypoint(roadAux.transform.position);
-            roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[1]);
+            roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[1];
             if (directions[1])
                 roadAux.transform.rotation = Quaternion.Euler(new Vector3(0f, -90f, 0f));
             else if(directions[0])
@@ -224,7 +226,7 @@ public class RoadPlacer : MonoBehaviour
         } else
         {
             waypointManager.RemoveWaypoint(roadAux.transform.position);
-            roadAux.GetComponent<Renderer>().material.SetTexture("_MainTex", roadTextures[0]);
+            roadAux.GetComponent<Renderer>().material.mainTexture = roadTextures[0];
         }
     } 
 }

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 1
   costPerTurn: 1
-  prefab: {fileID: 4911147921142196870, guid: 34cb3ee3f73ede049931c34cba894023, type: 3}
-  visual: {fileID: -8679921383154817045, guid: 5dd18e959f80fd84aab0da75ddc21b81, type: 3}
-  width: 1
-  height: 1
   population: 0
   jobs: 0
   food: 0
+  prefab: {fileID: 4911147921142196870, guid: 34cb3ee3f73ede049931c34cba894023, type: 3}
+  visual: {fileID: 4911147921142196870, guid: 5c2368cab1776554187983a10071c291, type: 3}
+  width: 1
+  height: 1
