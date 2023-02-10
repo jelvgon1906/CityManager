@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58f07604ff0c1249b2fd9b1a0b2dbfa, type: 3}
+  m_Name: Burritos
+  m_EditorClassIdentifier: 
+  cost: 1
+  costPerTurn: 1
+  population: 0
+  jobs: 0
+  food: 0
+  prefab: {fileID: 4911147921142196870, guid: 986b8363528a0fe41954a87205b15a0c, type: 3}
+  visual: {fileID: 4911147921142196870, guid: 9bdb86f855d94f7428439895bf5353ed, type: 3}
+  width: 1
+  height: 1
