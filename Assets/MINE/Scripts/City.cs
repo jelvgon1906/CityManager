@@ -15,18 +15,17 @@ public class City : MonoBehaviour
     public int maxJobs;
     public int incomePerJob;
 
-    public TextMeshProUGUI statsText;
-
-    public List<Building> buildings = new List<Building>();
+    public TextMeshProUGUI statsText, timeText;
 
     public static City instance;
+    public List<Building> buildings = new List<Building>();
 
     //DayCicle
-    public float curDayTime;
-    public float dayTime;
-    public GameObject sun;
+    [SerializeField] float curDayTime;
+    [SerializeField] float dayTime = 1440;//24 horas
+    [SerializeField] GameObject sun;
     string time;
-    public float timeMultiplier = 1;
+    float timeMultiplier = 1f;
     private void Awake()
     {
         instance = this;
@@ -43,7 +42,7 @@ public class City : MonoBehaviour
     }
 
     //called when we place down a building
-    public void OnPlaceBuilding (Building building)
+    public void OnPlaceBuilding(Building building)
     {
         buildings.Add(building);
 
@@ -74,8 +73,8 @@ public class City : MonoBehaviour
         int minutes = (int)curDayTime / 60;
         int seconds = (int)curDayTime % 60;
 
-        time = (minutes.ToString("00") + ":" + seconds.ToString("00"));
-        UpdateStatText();
+        time = (minutes.ToString("00") + ":00" /*+ seconds.ToString("00")*/);
+        UpdateTimeText();
         if (curDayTime >= dayTime)
         {
             curDayTime = 0;
@@ -91,18 +90,22 @@ public class City : MonoBehaviour
     {
         day++;
 
-        CalculateMoney();
+        /*CalculateMoney();*/
         CalculatePopulation();
         CalculateJobs();
-        CalculateFood();
+        /*CalculateFood();*/
 
         UpdateStatText();
     }
 
     private void UpdateStatText()
     {
-        statsText.text = String.Format("Money: {0} Population: {1}/{2} Jobs: {3}/{4} Food: {5} Time: {6} x {7} Day: {8}", new object[9] {money, curPopulation, maxPopulation, curJobs, maxJobs, curFood, time, timeMultiplier, day});
-    } 
+        statsText.text = String.Format("Dinero: {0} Poblacion: {1}/{2} Trabajos: {3}/{4} Comida: {5}", new object[6] {money.ToString("0000"), curPopulation.ToString("00"), maxPopulation.ToString("00"), curJobs.ToString("00"), maxJobs.ToString("00"), curFood.ToString("0000") });
+    }
+    private void UpdateTimeText()
+    {
+        timeText.text = String.Format("{0} x {1} \n Day: {2}", new object[3] {  time, timeMultiplier, day });
+    }
 
     private void CalculateFood()
     {
@@ -134,35 +137,35 @@ public class City : MonoBehaviour
     {
         money += curJobs * incomePerJob;
 
-        foreach(Building building in buildings) 
+        foreach (Building building in buildings)
             money -= building.preset.costPerTurn;
     }
 
     public void OnClickPlusMultiplier()
     {
-        if (timeMultiplier < 2)
+        if (timeMultiplier < 3f)
         {
-            timeMultiplier = timeMultiplier * 2;
+            timeMultiplier++;
         }
     }
 
     public void OnClickMinusMultiplier()
     {
-        if (timeMultiplier > 0.25)
+        if (timeMultiplier > 0.25f)
         {
-            timeMultiplier = timeMultiplier / 2;
+            timeMultiplier = timeMultiplier - 0.5f;
         }
     }
 
     public void OnClickPlayStopMultiplier()
     {
-        if(timeMultiplier != 0 ) 
+        if(timeMultiplier != 0f ) 
         {
-            timeMultiplier = 0;
+            timeMultiplier = 0f;
         }
         else
         {
-            timeMultiplier = 1; 
+            timeMultiplier = 1f; 
         }
        
     }

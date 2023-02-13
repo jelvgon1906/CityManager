@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlacedObjectTypeSO;
 
 [CreateAssetMenu(fileName ="Building Preset", menuName = "New Building Preset")]
 public class BuilldingPreset : ScriptableObject
