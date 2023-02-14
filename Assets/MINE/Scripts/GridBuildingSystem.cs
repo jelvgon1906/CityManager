@@ -144,9 +144,7 @@ public class GridBuildingSystem : MonoBehaviour
             {
                 PlacedObject placedObject = grid.GetGridObject(mousePosition).GetPlacedObject();
 
-                Building buildingToDestroy = City.instance.buildings.Find(x => x.transform.position == GetCurTilePosition());
-
-
+                Building buildingToDestroy = GetBuildingData().GetComponent<Building>();
                 if (placedObject != null)
                 {
                     City.instance.OnRemoveBuilding(buildingToDestroy);
@@ -237,33 +235,17 @@ public class GridBuildingSystem : MonoBehaviour
         }
     }
 
-    ///Repetido para deteccion
-    public Vector3 GetCurTilePosition()
+    private GameObject GetBuildingData()
     {
-        //return if we've hovering over UI
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return new Vector3(0, -99, 9);
-        }
-
-
-        //create the plane, ray and out distance
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float rayOut = 0.0f;
-
-        if (plane.Raycast(ray, out rayOut))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity,1<<0))
         {
-            //get the position at which we intersected the plane
-            Vector3 newPos = ray.GetPoint(rayOut) - new Vector3(0.5f, 0.0f, 0.5f);
-
-            //round that up to the nearest full number (nearest meter)
-            newPos = new Vector3(Mathf.CeilToInt(newPos.x), 0f, Mathf.CeilToInt(newPos.z));
-
-            return newPos;
+            return raycastHit.collider.gameObject;
         }
-
-        return new Vector3(0, -99, 9);
+        else
+        {
+            return null;
+        }
     }
     public void ToggleBulldoze()
     {

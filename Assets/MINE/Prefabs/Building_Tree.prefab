@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5334577950706561294}
   - component: {fileID: 1844802103700378642}
   - component: {fileID: -8984979634793744988}
+  - component: {fileID: 7837613278132333334}
   m_Layer: 0
   m_Name: Building_Tree
   m_TagString: Road
@@ -59,6 +60,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7a63ba1482f7744a85e51ce3fe84f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &7837613278132333334
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4911147921142196870}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 9, y: 5, z: 9}
+  m_Center: {x: 5, y: 2.5, z: 5}
 --- !u!1001 &5452958188703054413
 PrefabInstance:
   m_ObjectHideFlags: 0

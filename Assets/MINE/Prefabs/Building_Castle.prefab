@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7435961704083585761}
   - component: {fileID: 8392807809749762572}
   - component: {fileID: -6885094266078634564}
+  - component: {fileID: 7081006906886035304}
   m_Layer: 0
   m_Name: Building_Castle
   m_TagString: Untagged
@@ -59,6 +60,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7a63ba1482f7744a85e51ce3fe84f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &7081006906886035304
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672476224488938}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 18, y: 5, z: 18}
+  m_Center: {x: 10, y: 2.5, z: 10}
 --- !u!1001 &2957279176823367576
 PrefabInstance:
   m_ObjectHideFlags: 0

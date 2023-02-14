@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
     {
         cam = Camera.main;
         curZoom = cam.transform.localPosition.y;
-        curXRot = -50;
+        /*curXRot = -50;*/
     }
 
     private void Update()
