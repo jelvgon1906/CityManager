@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Sawmill
   m_EditorClassIdentifier: 
   cost: 10
-  costPerTurn: 5
+  costPerTurn: -10
   population: 0
   jobs: 3
-  food: 20
+  food: 0
   prefab: {fileID: 4911147921142196870, guid: 3b90dd9297f481a4ab6155d8c2aa059c, type: 3}
   visual: {fileID: 4911147921142196870, guid: 5fb18845bddf75e43a9f2b5e084ccd39, type: 3}
   width: 1

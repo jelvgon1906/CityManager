@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wall_Door
   m_EditorClassIdentifier: 
   cost: 1
-  costPerTurn: 1
+  costPerTurn: 0
   population: 0
   jobs: 0
   food: 0

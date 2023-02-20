@@ -24,6 +24,7 @@ public class City : MonoBehaviour
     [SerializeField] float curDayTime;
     [SerializeField] float dayTime = 1440;//24 horas
     [SerializeField] GameObject sun;
+    [SerializeField] GameObject luz1, luz2, luz3, luz4;
     string time;
     float timeMultiplier = 1f;
     private void Awake()
@@ -79,11 +80,40 @@ public class City : MonoBehaviour
         {
             curDayTime = 0;
             EndTurn();
+            lucesoff();
+
         }
+        if(curDayTime >= (dayTime/2)){
+            
+            luceson();
+        } 
 
         sun.transform.rotation = Quaternion.Euler((curDayTime / dayTime) * 360 + 270, 0f, 0f);
 
         /*RenderSettings.skybox.SetFloat("");*/
+    }
+
+    private void lucesoff()
+    {
+            luz1.gameObject.SetActive(false);
+        
+            luz2.gameObject.SetActive(false);
+
+            luz3.gameObject.SetActive(false);
+        
+            luz4.gameObject.SetActive(false);
+        
+    }
+    private void luceson()
+    {
+        luz1.gameObject.SetActive(true);
+
+        luz2.gameObject.SetActive(true);
+
+        luz3.gameObject.SetActive(true);
+
+        luz4.gameObject.SetActive(true);
+
     }
 
     public void EndTurn()
